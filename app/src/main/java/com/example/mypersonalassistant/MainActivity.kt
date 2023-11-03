@@ -1,4 +1,4 @@
-git package com.example.mypersonalassistant
+package com.example.mypersonalassistant
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,10 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyPersonalAssistantTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Greeting("Android")
                 }
             }

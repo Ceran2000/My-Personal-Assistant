@@ -32,7 +32,7 @@ fun MpaApp(
             .launchIn(this)
     }
 
-    Scaffold { padding ->
+    Scaffold() { padding ->
         MpaNavHost(
             modifier = Modifier
                 .fillMaxSize()

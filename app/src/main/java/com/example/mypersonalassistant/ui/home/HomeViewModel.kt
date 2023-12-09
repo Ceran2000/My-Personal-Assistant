@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val authManager: AuthManager) : ViewModel() {
+class HomeViewModel @Inject constructor(authManager: AuthManager) : ViewModel() {
 
     val currentUser: StateFlow<UserData?> = authManager.currentUser
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)

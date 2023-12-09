@@ -16,8 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.mypersonalassistant.ui.home.homeNavigationRoute
+import com.example.mypersonalassistant.navigation.mainNavigationRoute
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -52,7 +51,7 @@ fun SignInScreen(
     LaunchedEffect(Unit) {
         signInViewModel.isSignedIn
             .onEach {
-                if (it) navController.navigate(homeNavigationRoute)
+                if (it) navController.navigate(mainNavigationRoute)
             }
             .launchIn(this)
     }

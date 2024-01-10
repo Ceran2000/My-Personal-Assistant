@@ -35,7 +35,7 @@ class NotesViewModel @Inject constructor(
 
     private suspend fun getNotes(): List<Note> {
         showProgressBar()
-        val notes = notesRepository.getNotes()
+        val notes = notesRepository.getNotesForUser()
         hideProgressBar()
         return notes
     }

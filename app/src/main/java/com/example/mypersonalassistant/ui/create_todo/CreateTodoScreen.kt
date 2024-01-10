@@ -20,7 +20,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,24 +32,36 @@ import com.example.mypersonalassistant.ui.component.DefaultAppTopBar
 import com.example.mypersonalassistant.ui.component.TopBarTextButton
 import com.example.mypersonalassistant.ui.component.contentDescription
 import com.example.mypersonalassistant.ui.theme.MyPersonalAssistantTheme
-import com.example.mypersonalassistant.ui.todos.CreateTodoViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun CreateTodoScreen(
     viewModel: CreateTodoViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val todoName by viewModel.todoName.collectAsStateWithLifecycle()
-    val tasks by viewModel.todoTasks.collectAsStateWithLifecycle()
+    val saveButtonEnabled by viewModel.saveButtonEnabled.collectAsStateWithLifecycle()
+    val showProgressBar by viewModel.showProgressBar
+
+    LaunchedEffect(Unit) {
+        viewModel.closeScreen.onEach {
+            navController.popBackStack()
+        }.launchIn(this)
+    }
 
     MyPersonalAssistantTheme {
         Scaffold(
             topBar = {
                 DefaultAppTopBar(
-                    title = "Stwórz Zadanie",
+                    title = "Stwórz Listę Zadań",
+                    showProgressBar = showProgressBar,
                     navController = navController,
                     actions = {
-                        TopBarTextButton(text = "Zapisz", onClick = viewModel::onSaveTodoClicked)
+                        TopBarTextButton(
+                            text = "Zapisz",
+                            enabled = saveButtonEnabled,
+                            onClick = viewModel::onSaveTodoClicked
+                        )
                     }
                 )
             },
@@ -58,53 +72,72 @@ fun CreateTodoScreen(
                 }
             }
         ) { padding ->
-            Column(
+            CreateTodoScreenContent(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding)
-            ) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    value = todoName,
-                    onValueChange = viewModel::onTodoNameValueChanged
-                )
+                    .padding(padding),
+                viewModel = viewModel
+            )
+        }
+    }
+}
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+@Composable
+private fun CreateTodoScreenContent(
+    modifier: Modifier = Modifier,
+    viewModel: CreateTodoViewModel
+) {
+    val todoName by viewModel.todoName.collectAsStateWithLifecycle()
+    val tasks by viewModel.todoTasks.collectAsStateWithLifecycle()
+
+    Column(
+        modifier = modifier
+    ) {
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            value = todoName,
+            onValueChange = viewModel::onTodoNameValueChanged,
+            label = { Text("Nazwa") }
+        )
+
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            itemsIndexed(
+                items = tasks,
+                key = { index, _ -> index }
+            ) { index, task ->
+                ElevatedCard(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    itemsIndexed(
-                        items = tasks,
-                        key = { index, _ -> index }
-                    ) { index, task ->
-                        ElevatedCard(
-                            modifier = Modifier.fillMaxWidth()
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        OutlinedTextField(
+                            modifier = Modifier
+                                .weight(1f, true)
+                                .padding(start = 16.dp),
+                            value = task.newContentState,
+                            onValueChange = { value ->
+                                task.newContentState = value
+                            },
+                            label = { Text("Zadanie") }
+                        )
+                        IconButton(
+                            modifier = Modifier.padding(horizontal = 4.dp),
+                            onClick = { viewModel.onDeleteTaskClicked(index) }
                         ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-                            ) {
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(1f, true),
-                                    value = task.newContentState,
-                                    onValueChange = { value ->
-                                        task.newContentState = value
-                                    }
-                                )
-                                IconButton(
-                                    modifier = Modifier.padding(start = 16.dp),
-                                    onClick = { viewModel.onDeleteTaskClicked(index) }
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Clear,
-                                        contentDescription = contentDescription
-                                    )
-                                }
-                            }
+                            Icon(
+                                imageVector = Icons.Default.Clear,
+                                contentDescription = contentDescription
+                            )
                         }
                     }
                 }

@@ -63,12 +63,11 @@ fun NotesScreen(
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    DefaultAppTopBar(title = "Notatki", navController = navController)
-                    if (showProgressBar) {
-                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                    } else {
-                        Spacer(modifier = Modifier.height(4.0.dp))
-                    }
+                    DefaultAppTopBar(
+                        title = "Notatki",
+                        showProgressBar = showProgressBar,
+                        navController = navController
+                    )
                 }
             },
             floatingActionButton = {

@@ -1,7 +1,6 @@
 package com.example.mypersonalassistant.ui.sign_in
 
 import android.content.Intent
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mypersonalassistant.auth.AuthManager
@@ -17,9 +16,6 @@ class SignInViewModel @Inject constructor(private val authManager: AuthManager) 
 
     suspend fun signIn() = authManager.signIn()
 
-    suspend fun signInWithIntent(intent: Intent) {
-        val result = authManager.signInWithIntent(intent)
-        Log.d("MyPersonalAssistant", "### $result")
-    }
+    suspend fun signInWithIntent(intent: Intent) = authManager.signInWithIntent(intent)
 
 }

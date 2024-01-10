@@ -2,7 +2,6 @@ package com.example.mypersonalassistant.auth
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.example.mypersonalassistant.R
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInRequest.GoogleIdTokenRequestOptions
@@ -17,7 +16,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -41,7 +39,7 @@ class AuthManager @Inject constructor(
             firebaseAuth.currentUser?.let { UserData(it.uid, it.displayName, it.email, it.photoUrl.toString()) }
         }
 
-
+    val userId get() = firebaseAuth.currentUser?.uid
 
     val isUserSignedIn: Flow<Boolean> = callbackFlow {
         val authStateListener = AuthStateListener { auth ->
@@ -83,7 +81,6 @@ class AuthManager @Inject constructor(
             val userData = user?.let {
                 UserData(userId = it.uid, userName = it.displayName, email = it.email, imageUrl = it.photoUrl?.toString())
             }
-            Log.d("AuthManager", "### $userData")
             scope.launch {
                 authChangedFlow.emit(Unit)
             }

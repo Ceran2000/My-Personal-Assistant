@@ -12,7 +12,7 @@ class NotesRepository @Inject constructor(
 ) {
 
     suspend fun getNotesForUser(): List<Note> {
-        val data = database.collection(Constants.COLLECTION_NOTES).whereEqualTo("userId", authManager.userId!!).get().await()
+        val data = database.collection(Constants.COLLECTION_NOTES).whereEqualTo("userId", authManager.userId).get().await()
         return data.map { it.toNote() }
     }
 
@@ -20,7 +20,7 @@ class NotesRepository @Inject constructor(
         val input = hashMapOf(
             "title" to title,
             "content" to content,
-            "userId" to authManager.userId!!
+            "userId" to authManager.userId
         )
         database.collection(Constants.COLLECTION_NOTES).add(input).await()
     }

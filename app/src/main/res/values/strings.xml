@@ -1,4 +1,35 @@
 <resources>
+    <!-- [App]  -->
     <string name="app_name">My Personal Assistant</string>
     <string name="web_client_id">706319756659-8kt3gjkoqm451c4gpc67j36q4if8lk28.apps.googleusercontent.com</string>
+    <!-- [/App]  -->
+
+    <!-- [Common] -->
+    <string name="common_unknown_error">Wystąpił niespodziewany błąd.</string>
+    <string name="common_user_anonymous">Użytkownik anonimowy</string>
+    <!-- [/Common] -->
+
+    <!-- [Home] -->
+    <string name="home_appbar_title">Home</string>
+    <string name="home_drawer_notes_button">Notatki</string>
+    <string name="home_drawer_task_lists_button">Listy zadań</string>
+    <string name="home_drawer_log_out_button">Wyloguj</string>
+    <!-- [/Home] -->
+
+    <!-- [TaskLists] -->
+    <string name="task_lists_appbar_title">Listy zadań</string>
+    <!-- [/TaskLists] -->
+
+    <!-- [CreateTaskList] -->
+    <string name="create_task_list_appbar_title">"Stwórz listę zadań.</string>
+    <string name="create_task_list_save_button">Zapisz</string>
+    <string name="create_task_list_add_button">Dodaj</string>
+    <string name="create_task_list_name_label">Nazwa</string>
+    <string name="create_task_list_task_label">Zadanie</string>
+    <!-- [/CreateTaskList] -->
+
+    <!-- [Notes] -->
+    <string name="notes_appbar_title">Notatki</string>
+    <string name="notes_add_button">Dodaj</string>
+    <!-- [/Notes] -->
 </resources>

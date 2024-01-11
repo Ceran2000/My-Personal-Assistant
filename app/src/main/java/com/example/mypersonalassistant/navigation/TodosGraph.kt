@@ -3,15 +3,15 @@ package com.example.mypersonalassistant.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
-import com.example.mypersonalassistant.ui.create_todo.createTodo
-import com.example.mypersonalassistant.ui.todos.todosList
-import com.example.mypersonalassistant.ui.todos.todosListNavigationRoute
+import com.example.mypersonalassistant.ui.create_task_list.createTaskList
+import com.example.mypersonalassistant.ui.task_lists.taskLists
+import com.example.mypersonalassistant.ui.task_lists.taskListsNavigationRoute
 
 const val todosNavigationRoute = "todos"
 
 fun NavGraphBuilder.todosGraph(navController: NavController) {
-    navigation(startDestination = todosListNavigationRoute, route = todosNavigationRoute) {
-        todosList(navController = navController)
-        createTodo(navController = navController)
+    navigation(startDestination = taskListsNavigationRoute, route = todosNavigationRoute) {
+        taskLists(navController = navController)
+        createTaskList(navController = navController)
     }
 }

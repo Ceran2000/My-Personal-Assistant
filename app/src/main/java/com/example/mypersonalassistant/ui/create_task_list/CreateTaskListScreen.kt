@@ -1,4 +1,4 @@
-package com.example.mypersonalassistant.ui.create_todo
+package com.example.mypersonalassistant.ui.create_task_list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,10 +24,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.mypersonalassistant.R
 import com.example.mypersonalassistant.ui.component.DefaultAppTopBar
 import com.example.mypersonalassistant.ui.component.TopBarTextButton
 import com.example.mypersonalassistant.ui.component.contentDescription
@@ -36,8 +38,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @Composable
-fun CreateTodoScreen(
-    viewModel: CreateTodoViewModel = hiltViewModel(),
+fun CreateTaskListScreen(
+    viewModel: CreateTaskListViewModel = hiltViewModel(),
     navController: NavController
 ) {
     val saveButtonEnabled by viewModel.saveButtonEnabled.collectAsStateWithLifecycle()
@@ -53,14 +55,14 @@ fun CreateTodoScreen(
         Scaffold(
             topBar = {
                 DefaultAppTopBar(
-                    title = "Stwórz Listę Zadań",
+                    title = stringResource(R.string.create_task_list_appbar_title),
                     showProgressBar = showProgressBar,
                     navController = navController,
                     actions = {
                         TopBarTextButton(
-                            text = "Zapisz",
+                            text = stringResource(R.string.create_task_list_save_button),
                             enabled = saveButtonEnabled,
-                            onClick = viewModel::onSaveTodoClicked
+                            onClick = viewModel::onSaveListClicked
                         )
                     }
                 )
@@ -68,11 +70,11 @@ fun CreateTodoScreen(
             floatingActionButton = {
                 ExtendedFloatingActionButton(onClick = viewModel::onAddTaskClicked) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = contentDescription)
-                    Text("Dodaj")
+                    Text(stringResource(R.string.create_task_list_add_button))
                 }
             }
         ) { padding ->
-            CreateTodoScreenContent(
+            CreateTaskListScreenContent(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding),
@@ -83,12 +85,12 @@ fun CreateTodoScreen(
 }
 
 @Composable
-private fun CreateTodoScreenContent(
+private fun CreateTaskListScreenContent(
     modifier: Modifier = Modifier,
-    viewModel: CreateTodoViewModel
+    viewModel: CreateTaskListViewModel
 ) {
-    val todoName by viewModel.todoName.collectAsStateWithLifecycle()
-    val tasks by viewModel.todoTasks.collectAsStateWithLifecycle()
+    val listName by viewModel.listName.collectAsStateWithLifecycle()
+    val tasks by viewModel.tasks.collectAsStateWithLifecycle()
 
     Column(
         modifier = modifier
@@ -97,9 +99,9 @@ private fun CreateTodoScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            value = todoName,
-            onValueChange = viewModel::onTodoNameValueChanged,
-            label = { Text("Nazwa") }
+            value = listName,
+            onValueChange = viewModel::onListNameValueChanged,
+            label = { Text(stringResource(R.string.create_task_list_name_label)) }
         )
 
         LazyColumn(
@@ -128,7 +130,7 @@ private fun CreateTodoScreenContent(
                             onValueChange = { value ->
                                 task.newContentState = value
                             },
-                            label = { Text("Zadanie") }
+                            label = { Text(stringResource(R.string.create_task_list_task_label)) }
                         )
                         IconButton(
                             modifier = Modifier.padding(horizontal = 4.dp),

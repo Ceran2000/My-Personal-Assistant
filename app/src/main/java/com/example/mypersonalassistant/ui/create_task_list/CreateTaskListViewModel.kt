@@ -1,4 +1,4 @@
-package com.example.mypersonalassistant.ui.create_todo
+package com.example.mypersonalassistant.ui.create_task_list
 
 import android.app.Application
 import androidx.compose.runtime.State
@@ -8,11 +8,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mypersonalassistant.ui.util.EMPTY
+import com.example.mypersonalassistant.ui.util.showToast
+import com.example.mypersonalassistant.ui.util.toLocalizedException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -25,23 +26,23 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateTodoViewModel @Inject constructor(
+class CreateTaskListViewModel @Inject constructor(
     application: Application,
-    private val todosRepository: TodosRepository
+    private val taskListRepository: TaskListRepository
 ) : AndroidViewModel(application) {
 
-    private val _todoName = MutableStateFlow(String.EMPTY)
-    val todoName: StateFlow<String> = _todoName.asStateFlow()
+    private val _listName = MutableStateFlow(String.EMPTY)
+    val listName: StateFlow<String> = _listName.asStateFlow()
 
-    fun onTodoNameValueChanged(value: String) {
-        _todoName.value = value
+    fun onListNameValueChanged(value: String) {
+        _listName.value = value
     }
 
-    private val _todoTasks = MutableStateFlow<List<Task>>(emptyList())
-    val todoTasks = _todoTasks.asStateFlow()
+    private val _tasks = MutableStateFlow<List<Task>>(emptyList())
+    val tasks = _tasks.asStateFlow()
 
     fun onAddTaskClicked() {
-        _todoTasks.update {
+        _tasks.update {
             val list = it.toMutableList()
             list.add(Task.empty())
             list
@@ -49,19 +50,19 @@ class CreateTodoViewModel @Inject constructor(
     }
 
     fun onDeleteTaskClicked(index: Int) {
-        _todoTasks.update {
+        _tasks.update {
             val list = it.toMutableList()
             list.removeAt(index)
             list
         }
     }
 
-    private val addTodoProcessing = MutableStateFlow(false)
+    private val processingFlow = MutableStateFlow(false)
 
     val saveButtonEnabled: StateFlow<Boolean> by lazy {
         combine(
-            addTodoProcessing,
-            todoName
+            processingFlow,
+            listName
         ) { processing, name -> !processing && name.isNotEmpty() }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
     }
@@ -72,13 +73,19 @@ class CreateTodoViewModel @Inject constructor(
     private val _closeScreen = MutableSharedFlow<Unit>()
     val closeScreen: Flow<Unit> = _closeScreen.asSharedFlow()
 
-    fun onSaveTodoClicked() {
+    fun onSaveListClicked() {
         viewModelScope.launch {
-            addTodoProcessing.value = true
+            processingFlow.value = true
             _showProgressBar.value = true
-            todosRepository.addTodo(todoName.value, todoTasks.value)
+            try {
+                taskListRepository.addTaskList(listName.value, tasks.value)
+            } catch (e: Exception) {
+                e.toLocalizedException().message?.also {
+                    showToast(it)
+                }
+            }
             _showProgressBar.value = false
-            addTodoProcessing.value = false
+            processingFlow.value = false
             _closeScreen.emit(Unit)
         }
     }
@@ -86,15 +93,7 @@ class CreateTodoViewModel @Inject constructor(
 
 data class Task(val id: String, val content: String) {
 
-    //var enabled by mutableStateOf(false)
     var newContentState by mutableStateOf(content)
-/*    val newContentState by _newContentState
-
-    var newContent: String = content
-        set (input) {
-            field = input
-            _newContentState.value = input
-        }*/
 
     companion object {
         fun empty() = Task(id = UUID.randomUUID().toString(), String.EMPTY)

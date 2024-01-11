@@ -21,16 +21,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.mypersonalassistant.R
 import com.example.mypersonalassistant.navigation.todosNavigationRoute
 import com.example.mypersonalassistant.ui.MainViewModel
 import com.example.mypersonalassistant.ui.component.contentDescription
 import com.example.mypersonalassistant.ui.notes.notesNavigationRoute
 import com.example.mypersonalassistant.ui.theme.MyPersonalAssistantTheme
-import com.example.mypersonalassistant.ui.todos.todosListNavigationRoute
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,10 +56,12 @@ fun HomeScreen(
             drawerState = drawerState,
             drawerContent = {
                 ModalDrawerSheet {
-                    Text(text = currentUser?.email ?: "Brak", modifier = Modifier.padding(16.dp))
-                    Divider()
+                    currentUser?.let {
+                        Text(text = it.displayValue, modifier = Modifier.padding(16.dp))
+                        Divider()
+                    }
                     NavigationDrawerItem(
-                        label = { Text("Notatki") },
+                        label = { Text(stringResource(R.string.home_drawer_notes_button)) },
                         selected = false,
                         onClick = {
                             navController.navigate(notesNavigationRoute)
@@ -66,7 +69,7 @@ fun HomeScreen(
                         }
                     )
                     NavigationDrawerItem(
-                        label = { Text("Lista zadań") },
+                        label = { Text(stringResource(R.string.home_drawer_task_lists_button)) },
                         selected = false,
                         onClick = {
                             navController.navigate(todosNavigationRoute)
@@ -74,7 +77,7 @@ fun HomeScreen(
                         }
                     )
                     NavigationDrawerItem(
-                        label = { Text("Wyloguj") },
+                        label = { Text(stringResource(R.string.home_drawer_log_out_button)) },
                         selected = false,
                         onClick = mainViewModel::signOut
                     )
@@ -84,9 +87,9 @@ fun HomeScreen(
             Scaffold(
                 topBar = {
                     CenterAlignedTopAppBar(
-                        title = { Text("Home") },
+                        title = { Text(stringResource(R.string.home_appbar_title)) },
                         navigationIcon = {
-                            IconButton(onClick = { openDrawer() }) {
+                            IconButton(onClick = openDrawer) {
                                 Icon(imageVector = Icons.Default.Menu, contentDescription = contentDescription)
                             }
                         }

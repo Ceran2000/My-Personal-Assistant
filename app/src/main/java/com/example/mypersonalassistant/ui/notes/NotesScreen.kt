@@ -36,10 +36,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.mypersonalassistant.R
 import com.example.mypersonalassistant.ui.component.DefaultAppTopBar
 import com.example.mypersonalassistant.ui.component.contentDescription
 import com.example.mypersonalassistant.ui.theme.MyPersonalAssistantTheme
@@ -64,7 +66,7 @@ fun NotesScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     DefaultAppTopBar(
-                        title = "Notatki",
+                        title = stringResource(R.string.notes_appbar_title),
                         showProgressBar = showProgressBar,
                         navController = navController
                     )
@@ -156,7 +158,7 @@ private fun BottomSheet(
                 enabled = addNoteButtonEnabled,
                 onClick = notesViewModel::onAddNoteClicked
             ) {
-                Text("Dodaj")
+                Text(stringResource(R.string.notes_add_button))
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.mypersonalassistant.ui.todos
+package com.example.mypersonalassistant.ui.task_lists
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,33 +12,38 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.mypersonalassistant.R
 import com.example.mypersonalassistant.ui.component.DefaultAppTopBar
 import com.example.mypersonalassistant.ui.component.contentDescription
-import com.example.mypersonalassistant.ui.create_todo.createTodoNavigationRoute
+import com.example.mypersonalassistant.ui.create_task_list.createTaskListNavigationRoute
 import com.example.mypersonalassistant.ui.theme.MyPersonalAssistantTheme
 
 @Composable
-fun TodosListScreen(
-    viewModel: TodosViewModel = hiltViewModel(),
+fun TaskLists(
+    viewModel: TaskListsViewModel = hiltViewModel(),
     navController: NavController
 ) {
     MyPersonalAssistantTheme {
-        val todos by viewModel.todos.collectAsStateWithLifecycle()
-        val onCreateTaskClicked: () -> Unit = { navController.navigate(createTodoNavigationRoute) }
-
+        val taskLists by viewModel.taskLists.collectAsStateWithLifecycle()
+        val onCreateTaskListClicked: () -> Unit = { navController.navigate(createTaskListNavigationRoute) }
 
         Scaffold(
-            topBar = { DefaultAppTopBar(title = "Zadania", navController = navController) },
+            topBar = {
+                DefaultAppTopBar(
+                    title = stringResource(R.string.task_lists_appbar_title),
+                    navController = navController
+                )
+            },
             floatingActionButton = {
-                FloatingActionButton(onClick = onCreateTaskClicked) {
+                FloatingActionButton(onClick = onCreateTaskListClicked) {
                     Icon(
                         imageVector = Icons.Default.Add,
                         contentDescription = contentDescription
@@ -53,7 +58,7 @@ fun TodosListScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(todos, { it.id }) {
+                items(taskLists, { it.id }) {
                     it.Item(modifier = Modifier.fillMaxWidth())
                 }
             }

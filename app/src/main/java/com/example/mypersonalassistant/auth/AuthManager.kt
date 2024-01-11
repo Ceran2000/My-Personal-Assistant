@@ -3,6 +3,7 @@ package com.example.mypersonalassistant.auth
 import android.content.Context
 import android.content.Intent
 import com.example.mypersonalassistant.R
+import com.example.mypersonalassistant.ui.util.StringProvider
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInRequest.GoogleIdTokenRequestOptions
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -33,13 +34,13 @@ class AuthManager @Inject constructor(
     private val scope = MainScope()
 
     private val authChangedFlow = MutableSharedFlow<Unit>()
-    val currentUser: Flow<UserData?> = authChangedFlow
+    val currentUser: Flow<User?> = authChangedFlow
         .onStart { emit(Unit) }
         .map {
-            firebaseAuth.currentUser?.let { UserData(it.uid, it.displayName, it.email, it.photoUrl.toString()) }
+            firebaseAuth.currentUser?.let { User(it.uid, it.displayName, it.email, it.photoUrl.toString()) }
         }
 
-    val userId get() = firebaseAuth.currentUser?.uid
+    val userId get() = firebaseAuth.currentUser?.uid ?: throw UserNotLoggedInException()
 
     val isUserSignedIn: Flow<Boolean> = callbackFlow {
         val authStateListener = AuthStateListener { auth ->
@@ -79,15 +80,15 @@ class AuthManager @Inject constructor(
         return try {
             val user = firebaseAuth.signInWithCredential(googleCredentials).await().user
             val userData = user?.let {
-                UserData(userId = it.uid, userName = it.displayName, email = it.email, imageUrl = it.photoUrl?.toString())
+                User(userId = it.uid, name = it.displayName, email = it.email, imageUrl = it.photoUrl?.toString())
             }
             scope.launch {
                 authChangedFlow.emit(Unit)
             }
-            SignInResult(data = userData, errorMessage = null)
+            SignInResult(user = userData, errorMessage = null)
         } catch (e: Exception) {
             e.printStackTrace()
-            SignInResult(data = null, errorMessage = e.message)
+            SignInResult(user = null, errorMessage = e.message)
         }
     }
 
@@ -101,6 +102,4 @@ class AuthManager @Inject constructor(
     }
 }
 
-data class SignInResult(val data: UserData?, val errorMessage: String?)
-
-data class UserData(val userId: String, val userName: String?, val email: String?, val imageUrl: String?)
+data class SignInResult(val user: User?, val errorMessage: String?)

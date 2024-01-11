@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mypersonalassistant.ui.util.EMPTY
+import com.example.mypersonalassistant.ui.util.showToast
+import com.example.mypersonalassistant.ui.util.toLocalizedException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +37,12 @@ class NotesViewModel @Inject constructor(
 
     private suspend fun getNotes(): List<Note> {
         showProgressBar()
-        val notes = notesRepository.getNotesForUser()
+        val notes = try {
+            notesRepository.getNotesForUser()
+        } catch (e: Exception) {
+            e.toLocalizedException().message?.also { showToast(it) }
+            emptyList()
+        }
         hideProgressBar()
         return notes
     }
@@ -68,7 +75,11 @@ class NotesViewModel @Inject constructor(
         viewModelScope.launch {
             addNoteProcessing.value = true
             showProgressBar()
-            notesRepository.addNote(noteTitle.value, noteContent.value)
+            try {
+                notesRepository.addNote(noteTitle.value, noteContent.value)
+            } catch (e: Exception) {
+                e.toLocalizedException().message?.also { showToast(it) }
+            }
             _noteTitle.value = String.EMPTY
             _noteContent.value = String.EMPTY
             refreshNotes()
@@ -80,7 +91,11 @@ class NotesViewModel @Inject constructor(
     fun removeNote(note: Note) {
         viewModelScope.launch {
             showProgressBar()
-            notesRepository.removeNote(note)
+            try {
+                notesRepository.removeNote(note)
+            } catch (e: Exception) {
+                e.toLocalizedException().message?.also { showToast(it) }
+            }
             refreshNotes()
             hideProgressBar()
         }

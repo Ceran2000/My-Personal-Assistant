@@ -1,4 +1,4 @@
-package com.example.mypersonalassistant.ui.notes
+package com.example.mypersonalassistant.model
 
 import com.google.firebase.firestore.QueryDocumentSnapshot
 

@@ -5,6 +5,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mypersonalassistant.data.note.NotesRepository
+import com.example.mypersonalassistant.model.Note
 import com.example.mypersonalassistant.ui.util.EMPTY
 import com.example.mypersonalassistant.ui.util.showToast
 import com.example.mypersonalassistant.ui.util.toLocalizedException

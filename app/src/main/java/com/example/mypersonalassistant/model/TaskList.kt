@@ -1,4 +1,4 @@
-package com.example.mypersonalassistant.ui.task_lists
+package com.example.mypersonalassistant.model
 
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ListItem

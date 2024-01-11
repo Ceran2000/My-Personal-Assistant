@@ -21,7 +21,7 @@
     <!-- [/TaskLists] -->
 
     <!-- [CreateTaskList] -->
-    <string name="create_task_list_appbar_title">"Stwórz listę zadań.</string>
+    <string name="create_task_list_appbar_title">"Stwórz listę zadań</string>
     <string name="create_task_list_save_button">Zapisz</string>
     <string name="create_task_list_add_button">Dodaj</string>
     <string name="create_task_list_name_label">Nazwa</string>

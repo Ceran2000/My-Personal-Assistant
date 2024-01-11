@@ -1,7 +1,9 @@
-package com.example.mypersonalassistant.ui.notes
+package com.example.mypersonalassistant.data.note
 
 import com.example.mypersonalassistant.auth.AuthManager
 import com.example.mypersonalassistant.firestore.Constants
+import com.example.mypersonalassistant.model.Note
+import com.example.mypersonalassistant.model.toNote
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -12,7 +14,7 @@ class NotesRepository @Inject constructor(
 ) {
 
     suspend fun getNotesForUser(): List<Note> {
-        val data = database.collection(Constants.COLLECTION_NOTES).whereEqualTo("userId", authManager.userId).get().await()
+        val data = database.collection(Constants.COLLECTION_NOTE).whereEqualTo("userId", authManager.userId).get().await()
         return data.map { it.toNote() }
     }
 
@@ -22,10 +24,10 @@ class NotesRepository @Inject constructor(
             "content" to content,
             "userId" to authManager.userId
         )
-        database.collection(Constants.COLLECTION_NOTES).add(input).await()
+        database.collection(Constants.COLLECTION_NOTE).add(input).await()
     }
 
     suspend fun removeNote(note: Note) {
-        database.collection(Constants.COLLECTION_NOTES).document(note.id).delete().await()
+        database.collection(Constants.COLLECTION_NOTE).document(note.id).delete().await()
     }
 }

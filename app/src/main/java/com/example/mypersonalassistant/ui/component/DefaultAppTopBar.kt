@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -66,10 +67,13 @@ fun DefaultAppTopBar(
 
 @Composable
 fun TopBarTextButton(text: String, enabled: Boolean = true, onClick: () -> Unit) {
-    TextButton(enabled = enabled, onClick = onClick) {
+    TextButton(
+        enabled = enabled,
+        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary),
+        onClick = onClick
+    ) {
         Text(
-            text = text.uppercase(),
-            color = MaterialTheme.colorScheme.primary
+            text = text.uppercase()
         )
     }
 }

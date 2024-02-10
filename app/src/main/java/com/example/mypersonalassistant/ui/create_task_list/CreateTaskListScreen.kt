@@ -33,7 +33,7 @@ import com.example.mypersonalassistant.R
 import com.example.mypersonalassistant.ui.component.DefaultAppTopBar
 import com.example.mypersonalassistant.ui.component.TopBarTextButton
 import com.example.mypersonalassistant.ui.component.contentDescription
-import com.example.mypersonalassistant.ui.theme.MyPersonalAssistantTheme
+import com.example.mypersonalassistant.ui.theme.AppTheme
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -51,7 +51,7 @@ fun CreateTaskListScreen(
         }.launchIn(this)
     }
 
-    MyPersonalAssistantTheme {
+    AppTheme {
         Scaffold(
             topBar = {
                 DefaultAppTopBar(
@@ -126,9 +126,9 @@ private fun CreateTaskListScreenContent(
                             modifier = Modifier
                                 .weight(1f, true)
                                 .padding(start = 16.dp),
-                            value = task.newContentState,
+                            value = task.newContent,
                             onValueChange = { value ->
-                                task.newContentState = value
+                                task.newContent = value
                             },
                             label = { Text(stringResource(R.string.create_task_list_task_label)) }
                         )

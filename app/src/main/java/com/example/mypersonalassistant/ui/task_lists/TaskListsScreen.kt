@@ -24,14 +24,14 @@ import com.example.mypersonalassistant.R
 import com.example.mypersonalassistant.ui.component.DefaultAppTopBar
 import com.example.mypersonalassistant.ui.component.contentDescription
 import com.example.mypersonalassistant.ui.create_task_list.createTaskListNavigationRoute
-import com.example.mypersonalassistant.ui.theme.MyPersonalAssistantTheme
+import com.example.mypersonalassistant.ui.theme.AppTheme
 
 @Composable
 fun TaskLists(
     viewModel: TaskListsViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    MyPersonalAssistantTheme {
+    AppTheme {
         val taskLists by viewModel.taskLists.collectAsStateWithLifecycle()
         val onCreateTaskListClicked: () -> Unit = { navController.navigate(createTaskListNavigationRoute) }
 

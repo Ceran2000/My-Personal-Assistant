@@ -16,7 +16,7 @@ class TaskListRepository @Inject constructor(
     suspend fun addTaskList(title: String, tasks: List<Task>) {
         val input = hashMapOf(
             "title" to title,
-            "tasks" to tasks.map { it.newContentState },
+            "tasks" to tasks.map { it.newContent },
             "userId" to authManager.userId
         )
         database.collection(Constants.COLLECTION_TASK_LIST).add(input).await()

@@ -39,7 +39,7 @@ class CreateTaskListViewModel @Inject constructor(
         _listName.value = value
     }
 
-    private val _tasks = MutableStateFlow<List<Task>>(emptyList())
+    private val _tasks = MutableStateFlow(listOf(Task.empty()))
     val tasks = _tasks.asStateFlow()
 
     fun onAddTaskClicked() {
@@ -94,7 +94,7 @@ class CreateTaskListViewModel @Inject constructor(
 
 data class Task(val id: String, val content: String) {
 
-    var newContentState by mutableStateOf(content)
+    var newContent by mutableStateOf(content)
 
     companion object {
         fun empty() = Task(id = UUID.randomUUID().toString(), String.EMPTY)

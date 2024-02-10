@@ -4,10 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,12 +14,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -44,7 +40,7 @@ import androidx.navigation.NavController
 import com.example.mypersonalassistant.R
 import com.example.mypersonalassistant.ui.component.DefaultAppTopBar
 import com.example.mypersonalassistant.ui.component.contentDescription
-import com.example.mypersonalassistant.ui.theme.MyPersonalAssistantTheme
+import com.example.mypersonalassistant.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,7 +48,7 @@ fun NotesScreen(
     notesViewModel: NotesViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    MyPersonalAssistantTheme {
+    AppTheme {
 
         val sheetState = rememberModalBottomSheetState()
         var showBottomSheet by remember { mutableStateOf(false) }

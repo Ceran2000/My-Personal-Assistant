@@ -31,7 +31,7 @@ import com.example.mypersonalassistant.navigation.todosNavigationRoute
 import com.example.mypersonalassistant.ui.MainViewModel
 import com.example.mypersonalassistant.ui.component.contentDescription
 import com.example.mypersonalassistant.ui.notes.notesNavigationRoute
-import com.example.mypersonalassistant.ui.theme.MyPersonalAssistantTheme
+import com.example.mypersonalassistant.ui.theme.AppTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,7 +51,7 @@ fun HomeScreen(
     }
     val currentUser by homeViewModel.currentUser.collectAsStateWithLifecycle()
 
-    MyPersonalAssistantTheme {
+    AppTheme {
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {

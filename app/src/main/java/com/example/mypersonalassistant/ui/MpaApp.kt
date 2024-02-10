@@ -7,8 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.mypersonalassistant.navigation.MpaNavHost
+import com.example.mypersonalassistant.navigation.mainNavigationRoute
 import com.example.mypersonalassistant.ui.sign_in.signInNavigationRoute
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -20,15 +22,12 @@ fun MpaApp(
     val navController = rememberNavController()
 
     LaunchedEffect(Unit) {
-        mainViewModel.isSignedIn
-            .onEach { isUserSignedIn ->
-                if (!isUserSignedIn) {
-                    navController.run {
-                        popBackStack()
-                        navigate(signInNavigationRoute)
-                    }
-                }
-            }
+        mainViewModel.redirectToMainScreen
+            .onEach { navController.redirectToMainScreen() }
+            .launchIn(this)
+
+        mainViewModel.redirectToSignInScreen
+            .onEach { navController.redirectToSignInScreen() }
             .launchIn(this)
     }
 
@@ -40,4 +39,14 @@ fun MpaApp(
             navController = navController
         )
     }
+}
+
+private fun NavHostController.redirectToMainScreen() {
+    popBackStack()
+    navigate(mainNavigationRoute)
+}
+
+private fun NavHostController.redirectToSignInScreen() {
+    popBackStack()
+    navigate(signInNavigationRoute)
 }

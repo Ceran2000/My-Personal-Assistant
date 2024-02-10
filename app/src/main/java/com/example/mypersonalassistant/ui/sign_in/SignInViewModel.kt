@@ -12,8 +12,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SignInViewModel @Inject constructor(private val authManager: AuthManager) : ViewModel() {
 
-    val isSignedIn = authManager.isUserSignedIn.shareIn(viewModelScope, SharingStarted.WhileSubscribed())
-
     suspend fun signIn() = authManager.signIn()
 
     suspend fun signInWithIntent(intent: Intent) = authManager.signInWithIntent(intent)

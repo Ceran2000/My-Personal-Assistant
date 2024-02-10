@@ -86,6 +86,9 @@ dependencies {
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
+    //Lottie
+    implementation("com.airbnb.android:lottie-compose:6.3.0")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

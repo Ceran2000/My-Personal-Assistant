@@ -40,7 +40,7 @@ class NotesViewModel @Inject constructor(
     private suspend fun getNotes(): List<Note> {
         showProgressBar()
         val notes = try {
-            notesRepository.getNotesForUser()
+            notesRepository.getAllNotesForUser()
         } catch (e: Exception) {
             e.toLocalizedException().message?.also { showToast(it) }
             emptyList()

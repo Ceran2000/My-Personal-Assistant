@@ -9,6 +9,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 
 data class TaskList(val id: String, val title: String, val tasks: List<String>) {
 
+    val homeScreenMoreTaskCount: Int by lazy {
+        if (tasks.size > 3) tasks.size - 3 else 0
+    }
+
     @Composable
     fun Item(modifier: Modifier = Modifier) {
         ElevatedCard(modifier) {

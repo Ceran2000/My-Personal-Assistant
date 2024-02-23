@@ -28,7 +28,7 @@ class TaskListsViewModel @Inject constructor(
     }
 
     private suspend fun getTaskLists() = try {
-        taskListRepository.getTaskListsForUser()
+        taskListRepository.getAllTaskListsForUser()
     } catch (e: Exception) {
         e.toLocalizedException().message?.also {
             showToast(it)

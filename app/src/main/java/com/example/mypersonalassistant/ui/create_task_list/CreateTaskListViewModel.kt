@@ -96,6 +96,8 @@ data class Task(val id: String, val content: String) {
 
     var newContent by mutableStateOf(content)
 
+    val isNotEmpty get() = newContent.isNotEmpty()
+
     companion object {
         fun empty() = Task(id = UUID.randomUUID().toString(), String.EMPTY)
     }

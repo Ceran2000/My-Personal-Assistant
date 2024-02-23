@@ -22,10 +22,4 @@ class MainViewModel @Inject constructor(private val authManager: AuthManager) : 
         .filter { !it }
         .shareIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
-    fun signOut() {
-        viewModelScope.launch {
-            authManager.signOut()
-        }
-    }
-
 }

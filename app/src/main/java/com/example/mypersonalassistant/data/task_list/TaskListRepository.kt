@@ -5,7 +5,9 @@ import com.example.mypersonalassistant.firestore.Constants
 import com.example.mypersonalassistant.ui.create_task_list.Task
 import com.example.mypersonalassistant.model.TaskList
 import com.example.mypersonalassistant.model.toTaskList
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -16,14 +18,27 @@ class TaskListRepository @Inject constructor(
     suspend fun addTaskList(title: String, tasks: List<Task>) {
         val input = hashMapOf(
             "title" to title,
-            "tasks" to tasks.map { it.newContent },
-            "userId" to authManager.userId
+            "tasks" to tasks.filter { it.isNotEmpty }.map { it.newContent },
+            "userId" to authManager.userId,
+            "addedAt" to FieldValue.serverTimestamp()
         )
         database.collection(Constants.COLLECTION_TASK_LIST).add(input).await()
     }
 
-    suspend fun getTaskListsForUser(): List<TaskList> {
-            val data = database.collection(Constants.COLLECTION_TASK_LIST).whereEqualTo("userId", authManager.userId).get().await()
-            return data.map { it.toTaskList() }
-        }
+    suspend fun getAllTaskListsForUser(): List<TaskList> {
+        val data = database.collection(Constants.COLLECTION_TASK_LIST).whereEqualTo("userId", authManager.userId).get().await()
+        return data.map { it.toTaskList() }
+    }
+
+    suspend fun getLatestTaskListForUser(): TaskList? {
+        val data = database
+            .collection(Constants.COLLECTION_TASK_LIST)
+            .whereEqualTo("userId", authManager.userId)
+            .orderBy("addedAt", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .await()
+
+        return data.singleOrNull()?.toTaskList()
+    }
 }

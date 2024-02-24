@@ -129,6 +129,7 @@ private fun CreateTaskListScreenContent(
                             value = task.newContent,
                             onValueChange = { value ->
                                 task.newContent = value
+                                viewModel.onTaskContentValueChanged()
                             },
                             label = { Text(stringResource(R.string.create_task_list_task_label)) }
                         )

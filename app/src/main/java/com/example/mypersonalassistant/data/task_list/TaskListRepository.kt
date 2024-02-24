@@ -26,7 +26,13 @@ class TaskListRepository @Inject constructor(
     }
 
     suspend fun getAllTaskListsForUser(): List<TaskList> {
-        val data = database.collection(Constants.COLLECTION_TASK_LIST).whereEqualTo("userId", authManager.userId).get().await()
+        val data = database
+            .collection(Constants.COLLECTION_TASK_LIST)
+            .whereEqualTo("userId", authManager.userId)
+            .orderBy("addedAt", Query.Direction.DESCENDING)
+            .get()
+            .await()
+
         return data.map { it.toTaskList() }
     }
 

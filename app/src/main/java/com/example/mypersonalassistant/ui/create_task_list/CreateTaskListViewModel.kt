@@ -39,6 +39,13 @@ class CreateTaskListViewModel @Inject constructor(
         _listName.value = value
     }
 
+    private val taskContentValueChanged = MutableSharedFlow<Unit>()
+    fun onTaskContentValueChanged() {
+        viewModelScope.launch {
+            taskContentValueChanged.emit(Unit)
+        }
+    }
+
     private val _tasks = MutableStateFlow(listOf(Task.empty()))
     val tasks = _tasks.asStateFlow()
 
@@ -63,8 +70,12 @@ class CreateTaskListViewModel @Inject constructor(
     val saveButtonEnabled: StateFlow<Boolean> by lazy {
         combine(
             processingFlow,
-            listName
-        ) { processing, name -> !processing && name.isNotEmpty() }
+            listName,
+            tasks,
+            taskContentValueChanged
+        ) { processing, name, taskList,_ ->
+            !processing && name.isNotEmpty() && taskList.isNotEmpty() && taskList.all { it.isNotEmpty }
+        }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
     }
 
@@ -92,6 +103,7 @@ class CreateTaskListViewModel @Inject constructor(
     }
 }
 
+//TODO: is id required?
 data class Task(val id: String, val content: String) {
 
     var newContent by mutableStateOf(content)

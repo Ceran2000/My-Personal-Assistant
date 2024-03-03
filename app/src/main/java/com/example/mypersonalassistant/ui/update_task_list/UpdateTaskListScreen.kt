@@ -101,7 +101,7 @@ private fun TaskListScreenContent(
                 .padding(16.dp),
             value = title,
             onValueChange = viewModel::onTitleValueChanged,
-            label = { Text(stringResource(R.string.create_task_list_task_label)) }
+            label = { Text(stringResource(R.string.update_task_list_task_title_label)) }
         )
 
         LazyColumn(

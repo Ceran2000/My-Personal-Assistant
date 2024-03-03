@@ -8,6 +8,7 @@ import dagger.hilt.android.HiltAndroidApp
 class MpaApplication : Application() {
 
     companion object {
+        val TAG: String = this::class.java.simpleName
         lateinit var resources: Resources
     }
 

@@ -28,6 +28,13 @@
     <string name="create_task_list_task_label">Zadanie</string>
     <!-- [/CreateTaskList] -->
 
+    <!-- [UpdateTaskList] -->
+    <string name="update_task_list_appbar_title">Lista zadań</string>
+    <string name="update_task_list_appbar_button_save">Zapisz</string>
+    <string name="update_task_list_fab_add_button">Dodaj</string>
+    <string name="update_task_list_task_title_label">Nazwa</string>
+    <!-- [/UpdateTaskList] -->
+
     <!-- [Notes] -->
     <string name="notes_appbar_title">Notatki</string>
     <string name="notes_add_button">Dodaj</string>

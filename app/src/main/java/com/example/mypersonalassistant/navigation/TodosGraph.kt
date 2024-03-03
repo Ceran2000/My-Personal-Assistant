@@ -6,12 +6,14 @@ import androidx.navigation.navigation
 import com.example.mypersonalassistant.ui.create_task_list.createTaskList
 import com.example.mypersonalassistant.ui.task_lists.taskLists
 import com.example.mypersonalassistant.ui.task_lists.taskListsNavigationRoute
+import com.example.mypersonalassistant.ui.update_task_list.updateTaskList
 
-const val todosNavigationRoute = "todos"
+const val taskListsGraphNavigationRoute = "taskListsGraph"
 
-fun NavGraphBuilder.todosGraph(navController: NavController) {
-    navigation(startDestination = taskListsNavigationRoute, route = todosNavigationRoute) {
+fun NavGraphBuilder.taskListsGraph(navController: NavController) {
+    navigation(startDestination = taskListsNavigationRoute, route = taskListsGraphNavigationRoute) {
         taskLists(navController = navController)
         createTaskList(navController = navController)
+        updateTaskList(navController = navController)
     }
 }

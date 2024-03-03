@@ -36,6 +36,17 @@ class TaskListRepository @Inject constructor(
         return data.map { it.toTaskList() }
     }
 
+    suspend fun getTaskListById(taskListId: String): TaskList {
+        val data = database
+            .collection(Constants.COLLECTION_TASK_LIST)
+            .document(taskListId)
+            .get()
+            .await()
+
+        return data.toTaskList()
+
+    }
+
     suspend fun getLatestTaskListForUser(): TaskList? {
         val data = database
             .collection(Constants.COLLECTION_TASK_LIST)
@@ -46,5 +57,18 @@ class TaskListRepository @Inject constructor(
             .await()
 
         return data.singleOrNull()?.toTaskList()
+    }
+
+    suspend fun updateTaskList(id: String, title: String, tasks: List<Task>) {
+        val taskListRef = database
+            .collection(Constants.COLLECTION_TASK_LIST)
+            .document(id)
+
+        val input = hashMapOf(
+            "title" to title,
+            "tasks" to tasks.filter { it.isNotEmpty }.map { it.newContent }
+        )
+
+        taskListRef.update(input).await()
     }
 }

@@ -25,6 +25,7 @@ import com.example.mypersonalassistant.ui.component.DefaultAppTopBar
 import com.example.mypersonalassistant.ui.component.contentDescription
 import com.example.mypersonalassistant.ui.create_task_list.createTaskListNavigationRoute
 import com.example.mypersonalassistant.ui.theme.AppTheme
+import com.example.mypersonalassistant.ui.update_task_list.updateTaskListNavigationRoute
 
 @Composable
 fun TaskLists(
@@ -33,7 +34,8 @@ fun TaskLists(
 ) {
     AppTheme {
         val taskLists by viewModel.taskLists.collectAsStateWithLifecycle()
-        val onCreateTaskListClicked: () -> Unit = { navController.navigate(createTaskListNavigationRoute) }
+        val onCreateTaskListClicked: () -> Unit = { navController.navigateToCreateTaskListScreen() }
+        val onTaskListClicked: (id: String) -> Unit = { id -> navController.navigateToUpdateTaskListScreen(id) }
 
         Scaffold(
             topBar = {
@@ -59,9 +61,15 @@ fun TaskLists(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(taskLists, { it.id }) {
-                    it.Item(modifier = Modifier.fillMaxWidth())
+                    it.Item(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = onTaskListClicked
+                    )
                 }
             }
         }
     }
 }
+
+private fun NavController.navigateToCreateTaskListScreen() = navigate(createTaskListNavigationRoute)
+private fun NavController.navigateToUpdateTaskListScreen(id: String) = navigate("$updateTaskListNavigationRoute/$id")

@@ -103,14 +103,14 @@ class CreateTaskListViewModel @Inject constructor(
     }
 }
 
-//TODO: is id required?
-data class Task(val id: String, val content: String) {
+data class Task(val content: String) {
 
     var newContent by mutableStateOf(content)
 
+    val contentChanged get() = newContent != content
     val isNotEmpty get() = newContent.isNotEmpty()
 
     companion object {
-        fun empty() = Task(id = UUID.randomUUID().toString(), String.EMPTY)
+        fun empty() = Task(String.EMPTY)
     }
 }

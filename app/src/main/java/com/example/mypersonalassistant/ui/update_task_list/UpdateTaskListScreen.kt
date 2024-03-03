@@ -28,6 +28,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,22 +44,35 @@ import com.example.mypersonalassistant.ui.component.TopBarTextButton
 import com.example.mypersonalassistant.ui.component.contentDescription
 import com.example.mypersonalassistant.ui.create_task_list.Task
 import com.example.mypersonalassistant.ui.theme.AppTheme
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun UpdateTaskListScreen(
     viewModel: UpdateTaskListViewModel = hiltViewModel(),
     navController: NavController
 ) {
+    val saveButtonEnabled by viewModel.saveButtonEnabled.collectAsStateWithLifecycle()
+    val showProgressBar by viewModel.showProgressBar.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.closeScreen.onEach {
+            navController.popBackStack()
+        }
+            .launchIn(this)
+    }
+
     AppTheme {
         Scaffold(
             topBar = {
                 DefaultAppTopBar(
                     title = stringResource(R.string.update_task_list_appbar_title),
                     navController = navController,
+                    showProgressBar = showProgressBar,
                     actions = {
                         TopBarTextButton(
                             text = stringResource(R.string.update_task_list_appbar_button_save),
-                            enabled = true,     //TODO
+                            enabled = saveButtonEnabled,
                             onClick = viewModel::onSaveButtonClicked
                         )
                     }

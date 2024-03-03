@@ -11,9 +11,11 @@ import com.example.mypersonalassistant.ui.create_task_list.Task
 import com.example.mypersonalassistant.ui.util.showToast
 import com.example.mypersonalassistant.ui.util.toLocalizedException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -35,21 +37,25 @@ class UpdateTaskListViewModel @Inject constructor(
 
     private fun loadTaskList() {
         viewModelScope.launch {
+            _processing.emit(true)
             try {
                 val data = taskListRepository.getTaskListById(taskListId)
                 taskList.value = data
             } catch (e: Exception) {
-                //TODO: close screen
                 e.toLocalizedException().message?.also {
                     showToast(it)
                 }
+                _closeScreen.emit(Unit)
             }
+            _processing.emit(false)
         }
     }
 
-    init {
-        loadTaskList()
-    }
+    private val _processing = MutableStateFlow(false)
+    val showProgressBar = _processing
+
+    private val _closeScreen = MutableSharedFlow<Unit>()
+    val closeScreen: Flow<Unit> = _closeScreen.asSharedFlow()
 
     private val newTitle = MutableSharedFlow<String>()
     fun onTitleValueChanged(value: String) {
@@ -89,19 +95,30 @@ class UpdateTaskListViewModel @Inject constructor(
     )
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
+    val saveButtonEnabled = _processing
+        .map { !it }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
+
     fun onSaveButtonClicked() {
         viewModelScope.launch {
+            _processing.emit(true)
             try {
                 taskListRepository.updateTaskList(
                     id = taskListId,
                     title = listTitle.value,
                     tasks = tasks.value
                 )
+                _closeScreen.emit(Unit)
             } catch (e: Exception) {
                 e.toLocalizedException().message?.also {
                     showToast(it)
                 }
             }
+            _processing.emit(false)
         }
+    }
+
+    init {
+        loadTaskList()
     }
 }

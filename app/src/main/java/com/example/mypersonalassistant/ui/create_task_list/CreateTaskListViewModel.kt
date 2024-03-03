@@ -107,7 +107,6 @@ data class Task(val content: String) {
 
     var newContent by mutableStateOf(content)
 
-    val contentChanged get() = newContent != content
     val isNotEmpty get() = newContent.isNotEmpty()
 
     companion object {

@@ -18,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -33,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,6 +42,7 @@ import androidx.navigation.NavController
 import com.example.mypersonalassistant.R
 import com.example.mypersonalassistant.ui.component.DefaultAppTopBar
 import com.example.mypersonalassistant.ui.component.contentDescription
+import com.example.mypersonalassistant.ui.note.noteNavigationRoute
 import com.example.mypersonalassistant.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,23 +86,45 @@ fun NotesScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(notes, key = { it.key }) { note ->
+                items(
+                    items = notes,
+                    key = { it.key }
+                ) { note ->
                     OutlinedCard(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { navController.navigateToNote(note.id) }
                     ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp)
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(
                                 modifier = Modifier.weight(1.0f, true)
                             ) {
-                                Text(note.title)
-                                Text(note.content)
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = note.title,
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = note.content,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    maxLines = 3,
+                                    overflow = TextOverflow.Ellipsis
+                                )
                             }
                             IconButton(onClick = { notesViewModel.removeNote(note) }) {
-                                Icon(imageVector = Icons.Default.Delete, contentDescription = contentDescription)
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = contentDescription
+                                )
                             }
                         }
                     }
@@ -159,3 +184,5 @@ private fun BottomSheet(
         }
     }
 }
+
+private fun NavController.navigateToNote(noteId: String) = navigate("$noteNavigationRoute/$noteId")

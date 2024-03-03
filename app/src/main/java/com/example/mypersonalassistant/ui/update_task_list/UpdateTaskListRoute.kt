@@ -12,7 +12,7 @@ const val taskListIdArg = "taskListId"
 fun NavGraphBuilder.updateTaskList(navController: NavController) {
     composable(
         route = "$updateTaskListNavigationRoute/{$taskListIdArg}",
-        arguments = listOf(navArgument(taskListIdArg) { type = NavType.StringType})
+        arguments = listOf(navArgument(taskListIdArg) { type = NavType.StringType })
     ) {
         UpdateTaskListScreen(navController = navController)
     }

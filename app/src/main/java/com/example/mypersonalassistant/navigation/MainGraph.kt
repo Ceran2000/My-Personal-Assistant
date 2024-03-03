@@ -12,7 +12,7 @@ const val mainNavigationRoute = "main"
 fun NavGraphBuilder.mainGraph(navController: NavController) {
     navigation(startDestination = homeNavigationRoute, route = mainNavigationRoute) {
         homeScreen(navController)
-        notesScreen(navController)
+        notesGraph(navController)
         taskListsGraph(navController)
     }
 }

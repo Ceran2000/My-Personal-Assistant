@@ -37,6 +37,16 @@ class NotesRepository @Inject constructor(
         return data.singleOrNull()?.toNote()
     }
 
+    suspend fun getNoteById(noteId: String): Note {
+        val data = database
+            .collection(Constants.COLLECTION_NOTE)
+            .document(noteId)
+            .get()
+            .await()
+
+        return data.toNote()
+    }
+
     suspend fun addNote(title: String, content: String) {
         val input = hashMapOf(
             "title" to title,

@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.mypersonalassistant.model.Note
-import com.example.mypersonalassistant.ui.util.UiState
 
 @Composable
 fun LatestNoteItem(note: Note) {
@@ -44,13 +43,4 @@ fun LatestNoteItem(note: Note) {
 fun LatestNoteEmptyState() {
     //TODO: add note button
    HomeItemEmptyState(message = "Nie masz żadnych notatek.")
-}
-
-
-
-@Composable
-fun UiState<Note>.Component() = when (this) {
-    is UiState.Loading -> HomeItemLoadingState()
-    is UiState.Empty -> LatestNoteEmptyState()
-    is UiState.ShowContent -> LatestNoteItem(note = data)
 }

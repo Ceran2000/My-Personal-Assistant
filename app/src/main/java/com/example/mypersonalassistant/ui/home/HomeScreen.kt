@@ -1,10 +1,5 @@
 package com.example.mypersonalassistant.ui.home
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -13,18 +8,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.mypersonalassistant.R
+import com.example.mypersonalassistant.model.Note
 import com.example.mypersonalassistant.ui.component.contentDescription
 import com.example.mypersonalassistant.ui.theme.AppTheme
+import com.example.mypersonalassistant.ui.util.UiState
 import kotlinx.coroutines.launch
 
 
@@ -102,7 +96,6 @@ private fun HomeScreenContent(
         }
 
         item("latest_task_list") {
-            //TODO: pokazuje najstarszą a nie najnowszą notatkę
             Headline("Ostatnia lista zadań")
             latestTaskList.Component()
         }
@@ -117,4 +110,11 @@ private fun Headline(text: String) {
         color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
     )
+}
+
+@Composable
+private fun UiState<Note>.Component() = when (this) {
+    is UiState.Loading -> HomeItemLoadingState()
+    is UiState.Empty -> LatestNoteEmptyState()
+    is UiState.ShowContent -> LatestNoteItem(note = data)
 }

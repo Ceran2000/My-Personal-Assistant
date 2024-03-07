@@ -8,7 +8,7 @@
 
 - **Programming Language**: Kotlin
 - **Firebase**: Cloud Firestore for data storage and Authentication module for user authentication.
-- **Jetpack Compose**: A modern UI toolkit for Android applications, enabling declarative UI creation.
+- **Jetpack Compose**: A modern UI toolkit for Android applications, enabling declarative UI creation. Utilizes **Material Design 3** principles for a cohesive and visually appealing user interface.
 - **Navigation**: Android Jetpack's Navigation component for handling navigation between different screens within the app.
 - **Hilt**: A dependency injection library for Android applications. It simplifies managing components and providing them with dependencies.
 - **Lottie**: A library for handling animations, allowing integration with animations created in JSON format.

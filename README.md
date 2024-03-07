@@ -13,3 +13,13 @@
 - **Hilt**: A dependency injection library for Android applications. It simplifies managing components and providing them with dependencies.
 - **Lottie**: A library for handling animations, allowing integration with animations created in JSON format.
 
+## Future Plans
+
+Some future plans for the development of the project:
+
+- **Collaborative Note and List Creation**: Implementing a system for collaborative note and list creation through invitation-based sharing.
+- **Database Technology Transition**: Transitioning to a different remote database technology to improve scalability, performance, or other factors.
+- **Local Database Implementation**: Adding support for a local database to enable offline access and improve performance.
+- **Integration with Calendar**: Adding integration with calendar services to allow users to schedule tasks and events directly from the app.
+- **Task Reminders and Notifications**: Implementing reminders and notifications for tasks and events to help users stay organized and on track.
+- **Cross-Platform Support**: Expanding the project to support other platforms such as iOS or web browsers to reach a wider audience.

@@ -78,7 +78,7 @@ data class TaskList(val id: String, val title: String, val tasks: List<Task>) {
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
                         Text(
-                            text = "${index+1}. ${task.content}",
+                            text = "${index+1}. ${task.newContent}",
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodySmall
                         )
@@ -89,8 +89,14 @@ data class TaskList(val id: String, val title: String, val tasks: List<Task>) {
     }
 }
 
-fun DocumentSnapshot.toTaskList(): TaskList = TaskList(
-    id = this.id,
-    title = this["title"] as String,
-    tasks = (this["tasks"] as List<String>).map { Task(it) }
-)
+fun DocumentSnapshot.toTaskList(): TaskList {
+    val tasks = this["tasks"] as List<HashMap<String, Any>>
+    val taskList = tasks.map {
+        Task(it["content"] as String, it["endTimeMillis"] as Long?)
+    }
+    return TaskList(
+        id = this.id,
+        title = this["title"] as String,
+        tasks = taskList
+    )
+}

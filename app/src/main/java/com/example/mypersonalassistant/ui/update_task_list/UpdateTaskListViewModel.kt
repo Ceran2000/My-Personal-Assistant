@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mypersonalassistant.data.task_list.TaskListRepository
 import com.example.mypersonalassistant.model.TaskList
 import com.example.mypersonalassistant.ui.create_task_list.Task
@@ -16,10 +15,12 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,7 +38,7 @@ class UpdateTaskListViewModel @Inject constructor(
 
     private fun loadTaskList() {
         viewModelScope.launch {
-            _processing.emit(true)
+            processingFlow.emit(true)
             try {
                 val data = taskListRepository.getTaskListById(taskListId)
                 taskList.value = data
@@ -47,12 +48,19 @@ class UpdateTaskListViewModel @Inject constructor(
                 }
                 _closeScreen.emit(Unit)
             }
-            _processing.emit(false)
+            processingFlow.emit(false)
         }
     }
 
-    private val _processing = MutableStateFlow(false)
-    val showProgressBar = _processing
+    private val taskContentValueChanged = MutableSharedFlow<Unit>()
+    fun onTaskContentValueChanged() {
+        viewModelScope.launch {
+            taskContentValueChanged.emit(Unit)
+        }
+    }
+
+    private val processingFlow = MutableStateFlow(false)
+    val showProgressBar = processingFlow.asStateFlow()
 
     private val _closeScreen = MutableSharedFlow<Unit>()
     val closeScreen: Flow<Unit> = _closeScreen.asSharedFlow()
@@ -95,13 +103,19 @@ class UpdateTaskListViewModel @Inject constructor(
     )
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
-    val saveButtonEnabled = _processing
-        .map { !it }
+    val saveButtonEnabled = combine(
+        processingFlow,
+        listTitle,
+        tasks,
+        taskContentValueChanged.onStart { emit(Unit) }
+    ) { processing, name, taskList, _ ->
+        !processing && name.isNotEmpty() && taskList.isNotEmpty() && taskList.all { it.isNotEmpty }
+    }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
     fun onSaveButtonClicked() {
         viewModelScope.launch {
-            _processing.emit(true)
+            processingFlow.emit(true)
             try {
                 taskListRepository.updateTaskList(
                     id = taskListId,
@@ -114,7 +128,7 @@ class UpdateTaskListViewModel @Inject constructor(
                     showToast(it)
                 }
             }
-            _processing.emit(false)
+            processingFlow.emit(false)
         }
     }
 

@@ -31,7 +31,7 @@ fun LatestTaskList(taskList: TaskList) {
             )
             taskList.tasks.take(3).forEachIndexed { index, task ->
                 Text(
-                    text = "${index + 1}. ${task.content}",
+                    text = "${index + 1}. ${task.newContent}",
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

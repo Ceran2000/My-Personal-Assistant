@@ -18,7 +18,12 @@ class TaskListRepository @Inject constructor(
     suspend fun addTaskList(title: String, tasks: List<Task>) {
         val input = hashMapOf(
             "title" to title,
-            "tasks" to tasks.filter { it.isNotEmpty }.map { it.newContent },
+            "tasks" to tasks.filter { it.isNotEmpty }.map { task ->
+                hashMapOf(
+                    "content" to task.newContent,
+                    "endTimeMillis" to task.newEndDateMillis
+                )
+            },
             "userId" to authManager.userId,
             "addedAt" to FieldValue.serverTimestamp()
         )
@@ -66,7 +71,12 @@ class TaskListRepository @Inject constructor(
 
         val input = hashMapOf(
             "title" to title,
-            "tasks" to tasks.filter { it.isNotEmpty }.map { it.newContent }
+            "tasks" to tasks.filter { it.isNotEmpty }.map { task ->
+                hashMapOf(
+                    "content" to task.newContent,
+                    "endTimeMillis" to task.newEndDateMillis
+                )
+            }
         )
 
         taskListRef.update(input).await()

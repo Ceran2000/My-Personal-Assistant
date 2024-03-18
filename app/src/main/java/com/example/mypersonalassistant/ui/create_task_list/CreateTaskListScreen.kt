@@ -33,6 +33,7 @@ import com.example.mypersonalassistant.R
 import com.example.mypersonalassistant.ui.component.DefaultAppTopBar
 import com.example.mypersonalassistant.ui.component.TopBarTextButton
 import com.example.mypersonalassistant.ui.component.contentDescription
+import com.example.mypersonalassistant.ui.create_update_task_list.TaskItem
 import com.example.mypersonalassistant.ui.theme.AppTheme
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -43,7 +44,7 @@ fun CreateTaskListScreen(
     navController: NavController
 ) {
     val saveButtonEnabled by viewModel.saveButtonEnabled.collectAsStateWithLifecycle()
-    val showProgressBar by viewModel.showProgressBar
+    val showProgressBar by viewModel.showProgressBar.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.closeScreen.onEach {
@@ -89,7 +90,7 @@ private fun CreateTaskListScreenContent(
     modifier: Modifier = Modifier,
     viewModel: CreateTaskListViewModel
 ) {
-    val listName by viewModel.listName.collectAsStateWithLifecycle()
+    val title by viewModel.listName.collectAsStateWithLifecycle()
     val tasks by viewModel.tasks.collectAsStateWithLifecycle()
 
     Column(
@@ -99,7 +100,7 @@ private fun CreateTaskListScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            value = listName,
+            value = title,
             onValueChange = viewModel::onListNameValueChanged,
             label = { Text(stringResource(R.string.create_task_list_name_label)) }
         )
@@ -113,37 +114,12 @@ private fun CreateTaskListScreenContent(
                 items = tasks,
                 key = { index, _ -> index }
             ) { index, task ->
-                ElevatedCard(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .weight(1f, true)
-                                .padding(start = 16.dp),
-                            value = task.newContent,
-                            onValueChange = { value ->
-                                task.newContent = value
-                                viewModel.onTaskContentValueChanged()
-                            },
-                            label = { Text(stringResource(R.string.create_task_list_task_label)) }
-                        )
-                        IconButton(
-                            modifier = Modifier.padding(horizontal = 4.dp),
-                            onClick = { viewModel.onDeleteTaskClicked(index) }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Clear,
-                                contentDescription = contentDescription
-                            )
-                        }
-                    }
-                }
+                TaskItem(
+                    task = task,
+                    index = index,
+                    onContentValueChanged = viewModel::onTaskContentValueChanged,
+                    onRemoveTaskClicked = viewModel::onDeleteTaskClicked
+                )
             }
         }
     }

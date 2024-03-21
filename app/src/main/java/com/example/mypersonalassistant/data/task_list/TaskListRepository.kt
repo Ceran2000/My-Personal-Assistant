@@ -21,7 +21,7 @@ class TaskListRepository @Inject constructor(
             "tasks" to tasks.filter { it.isNotEmpty }.map { task ->
                 hashMapOf(
                     "content" to task.newContent,
-                    "endTimeMillis" to task.newEndDateMillis
+                    "endTimeMillis" to task.newEndDateUTCMillis
                 )
             },
             "userId" to authManager.userId,
@@ -74,7 +74,7 @@ class TaskListRepository @Inject constructor(
             "tasks" to tasks.filter { it.isNotEmpty }.map { task ->
                 hashMapOf(
                     "content" to task.newContent,
-                    "endTimeMillis" to task.newEndDateMillis
+                    "endTimeMillis" to task.newEndDateUTCMillis
                 )
             }
         )

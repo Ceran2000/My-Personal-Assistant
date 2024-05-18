@@ -16,8 +16,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -31,21 +34,18 @@ class NotesViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
     val notes: StateFlow<List<Note>> by lazy {
-        noteRepository.getNotes()      //TODO: error catch
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+        flow {
+            showProgressBar()
+            val notes = noteRepository.getNotes()
+            emitAll(notes)
+            hideProgressBar()
+        }.catch { e ->
+            e.toLocalizedException().message?.also {
+                showToast(it)
+            }
+            emit(emptyList())
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
-
-/*    private suspend fun getNotes(): List<RemoteNote> {
-        showProgressBar()
-        val notes = try {
-            noteRepository.getAllNotesForUser()
-        } catch (e: Exception) {
-            e.toLocalizedException().message?.also { showToast(it) }
-            emptyList()
-        }
-        hideProgressBar()
-        return notes
-    }*/
 
     private val _noteTitle = MutableStateFlow(String.EMPTY)
     val noteTitle: StateFlow<String> = _noteTitle.asStateFlow()

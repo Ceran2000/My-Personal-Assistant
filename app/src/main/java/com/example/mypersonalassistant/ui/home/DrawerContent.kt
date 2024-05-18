@@ -1,7 +1,7 @@
 package com.example.mypersonalassistant.ui.home
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
@@ -15,7 +15,6 @@ import androidx.navigation.NavController
 import com.example.mypersonalassistant.R
 import com.example.mypersonalassistant.navigation.notesGraphNavigationRoute
 import com.example.mypersonalassistant.navigation.taskListsGraphNavigationRoute
-import com.example.mypersonalassistant.ui.notes.notesNavigationRoute
 
 @Composable
 fun DrawerContent(
@@ -29,7 +28,7 @@ fun DrawerContent(
     ModalDrawerSheet {
         currentUser?.let {
             Text(text = it.displayValue, modifier = Modifier.padding(16.dp))
-            Divider()
+            HorizontalDivider()
         }
         NavigationDrawerItem(
             label = { Text(stringResource(R.string.home_drawer_notes_button)) },

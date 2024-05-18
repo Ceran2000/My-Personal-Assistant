@@ -1,4 +1,4 @@
-package com.example.mypersonalassistant.ui.create_task_list
+package com.example.mypersonalassistant.ui.create_update_task_list.create_task_list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

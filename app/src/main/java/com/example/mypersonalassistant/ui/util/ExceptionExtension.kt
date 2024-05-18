@@ -7,3 +7,8 @@ fun Exception.toLocalizedException(): Exception = when (this) {
     is CancellationException -> Exception()
     else -> Exception(StringProvider.getString(R.string.common_unknown_error))
 }
+
+fun Throwable.toLocalizedException(): Exception = when (this) {
+    is Exception -> toLocalizedException()
+    else -> Exception(StringProvider.getString(R.string.common_unknown_error))
+}

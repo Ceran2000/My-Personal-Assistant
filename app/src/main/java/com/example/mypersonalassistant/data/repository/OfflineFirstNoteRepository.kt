@@ -19,23 +19,22 @@ class OfflineFirstNoteRepository @Inject constructor(
     private val noteDao: NoteDao,
     private val remoteDateSource: NoteRemoteDataSource
 ) {
-    private val scope = MainScope()
 
     fun getNotes(): Flow<List<Note>> =
         noteDao.getAll()
             .map { it.map(LocalNote::asExternalModel) }
-            .onStart { syncNotesInBackground() }
+            .onStart { refreshNotes() }
 
     suspend fun getNote(id: String): Note =
         noteDao.findById(id)?.asExternalModel()!!
 
     fun getLatestNote(): Flow<Note?> =
         noteDao.getLatest().map { it?.asExternalModel() }
-            .onStart { syncNotesInBackground() }
+            .onStart { refreshNotes() }
 
     suspend fun addNote(title: String, content: String) {
         remoteDateSource.addNote(title, content)
-        refreshNotes()      //TODO: handle timeout
+        refreshNotes()
     }
 
     suspend fun removeNote(id: String) {
@@ -46,9 +45,5 @@ class OfflineFirstNoteRepository @Inject constructor(
     private suspend fun refreshNotes() {
         val remoteNotes = remoteDateSource.getAllNotesForUser().map(RemoteNote::asEntity)
         noteDao.syncAll(remoteNotes)
-    }
-
-    private fun syncNotesInBackground() {
-        scope.launch { refreshNotes() }
     }
 }

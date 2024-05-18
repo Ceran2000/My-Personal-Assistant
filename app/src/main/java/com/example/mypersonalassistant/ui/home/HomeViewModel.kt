@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mypersonalassistant.auth.AuthManager
 import com.example.mypersonalassistant.auth.User
-import com.example.mypersonalassistant.data.note.NotesRepository
-import com.example.mypersonalassistant.data.task_list.TaskListRepository
-import com.example.mypersonalassistant.model.Note
-import com.example.mypersonalassistant.model.TaskList
+import com.example.mypersonalassistant.data.model.Note
+import com.example.mypersonalassistant.data.remote.repository.TaskListRepository
+import com.example.mypersonalassistant.data.remote.model.TaskList
+import com.example.mypersonalassistant.data.repository.OfflineFirstNoteRepository
 import com.example.mypersonalassistant.ui.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val authManager: AuthManager,
-    private val notesRepository: NotesRepository,
+    noteRepository: OfflineFirstNoteRepository,
     private val taskListRepository: TaskListRepository
 ) : ViewModel() {
 
@@ -34,11 +34,10 @@ class HomeViewModel @Inject constructor(
     }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "Cześć")
 
-    val latestNote: StateFlow<UiState<Note>> = flow {
-        val note = notesRepository.getLatestNoteForUser()
-        val uiState = note?.let { UiState.ShowContent(it) } ?: UiState.Empty
-        emit(uiState)
-    }
+    val latestNote: StateFlow<UiState<Note>> = noteRepository.getLatestNote()
+        .map { note ->
+            note?.let { UiState.ShowContent(it) } ?: UiState.Empty
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UiState.Loading)
 
     val latestTaskList: StateFlow<UiState<TaskList>> = flow {

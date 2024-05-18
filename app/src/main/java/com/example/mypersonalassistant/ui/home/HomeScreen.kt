@@ -15,7 +15,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.mypersonalassistant.R
-import com.example.mypersonalassistant.model.Note
+import com.example.mypersonalassistant.data.model.Note
+import com.example.mypersonalassistant.data.remote.model.RemoteNote
 import com.example.mypersonalassistant.ui.component.contentDescription
 import com.example.mypersonalassistant.ui.theme.AppTheme
 import com.example.mypersonalassistant.ui.util.UiState

@@ -1,21 +1,21 @@
-package com.example.mypersonalassistant.data.note
+package com.example.mypersonalassistant.data.remote.repository
 
 import com.example.mypersonalassistant.auth.AuthManager
 import com.example.mypersonalassistant.firestore.Constants
-import com.example.mypersonalassistant.model.Note
-import com.example.mypersonalassistant.model.toNote
+import com.example.mypersonalassistant.data.remote.model.RemoteNote
+import com.example.mypersonalassistant.data.remote.model.toNote
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class NotesRepository @Inject constructor(
+class NoteRemoteDataSource @Inject constructor(
     private val database: FirebaseFirestore,
     private val authManager: AuthManager
 ) {
 
-    suspend fun getAllNotesForUser(): List<Note> {
+    suspend fun getAllNotesForUser(): List<RemoteNote> {
         val data = database
             .collection(Constants.COLLECTION_NOTE)
             .whereEqualTo("userId", authManager.userId)
@@ -25,7 +25,7 @@ class NotesRepository @Inject constructor(
         return data.map { it.toNote() }
     }
 
-    suspend fun getLatestNoteForUser(): Note? {
+    suspend fun getLatestNoteForUser(): RemoteNote? {
         val data = database
             .collection(Constants.COLLECTION_NOTE)
             .whereEqualTo("userId", authManager.userId)
@@ -37,7 +37,7 @@ class NotesRepository @Inject constructor(
         return data.singleOrNull()?.toNote()
     }
 
-    suspend fun getNoteById(noteId: String): Note {
+    suspend fun getNoteById(noteId: String): RemoteNote {
         val data = database
             .collection(Constants.COLLECTION_NOTE)
             .document(noteId)
@@ -57,7 +57,7 @@ class NotesRepository @Inject constructor(
         database.collection(Constants.COLLECTION_NOTE).add(input).await()
     }
 
-    suspend fun removeNote(note: Note) {
-        database.collection(Constants.COLLECTION_NOTE).document(note.id).delete().await()
+    suspend fun removeNote(id: String) {
+        database.collection(Constants.COLLECTION_NOTE).document(id).delete().await()
     }
 }

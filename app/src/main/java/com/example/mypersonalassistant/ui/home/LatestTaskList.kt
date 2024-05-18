@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.mypersonalassistant.model.TaskList
+import com.example.mypersonalassistant.data.remote.model.TaskList
 import com.example.mypersonalassistant.ui.util.UiState
 
 @Composable

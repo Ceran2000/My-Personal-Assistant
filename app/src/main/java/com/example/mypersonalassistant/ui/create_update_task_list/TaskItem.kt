@@ -43,10 +43,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.mypersonalassistant.data.remote.model.Task
 import com.example.mypersonalassistant.ui.component.DatePickerDialogWithThirdButton
 import com.example.mypersonalassistant.ui.component.TimePickerDialog
 import com.example.mypersonalassistant.ui.component.contentDescription
-import com.example.mypersonalassistant.ui.create_task_list.Task
 import com.example.mypersonalassistant.util.toMillis
 import com.example.mypersonalassistant.util.toStartOfDay
 import java.time.Instant

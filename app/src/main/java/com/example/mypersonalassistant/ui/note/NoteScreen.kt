@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -17,12 +16,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.mypersonalassistant.model.Note
+import com.example.mypersonalassistant.data.model.Note
+import com.example.mypersonalassistant.data.remote.model.RemoteNote
 import com.example.mypersonalassistant.ui.component.DefaultAppTopBar
 import com.example.mypersonalassistant.ui.theme.AppTheme
 import com.example.mypersonalassistant.ui.util.UiState
@@ -77,7 +76,7 @@ private fun NoteContent(note: Note) {
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent
             )
         )
 

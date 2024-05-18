@@ -1,19 +1,13 @@
 package com.example.mypersonalassistant.ui.create_task_list
 
 import android.app.Application
-import android.content.Context
-import android.text.format.DateUtils
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mypersonalassistant.data.task_list.TaskListRepository
+import com.example.mypersonalassistant.data.remote.model.Task
+import com.example.mypersonalassistant.data.remote.repository.TaskListRepository
 import com.example.mypersonalassistant.ui.util.EMPTY
 import com.example.mypersonalassistant.ui.util.showToast
 import com.example.mypersonalassistant.ui.util.toLocalizedException
-import com.example.mypersonalassistant.util.toFormattedString
-import com.example.mypersonalassistant.util.toZonedDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,10 +21,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -103,20 +93,5 @@ class CreateTaskListViewModel @Inject constructor(
             processingFlow.value = false
             _closeScreen.emit(Unit)
         }
-    }
-}
-
-data class Task(private val content: String, private val endDateUTCMillis: Long?) {
-
-    var newContent by mutableStateOf(content)
-    val isNotEmpty get() = newContent.isNotEmpty()
-
-    var newEndDateUTCMillis by mutableStateOf(endDateUTCMillis)
-
-    val hasEndDateTimeSet get() = newEndDateUTCMillis != null
-    val endDateTimeString get() = newEndDateUTCMillis?.toZonedDateTime()?.toFormattedString()
-
-    companion object {
-        fun empty() = Task(String.EMPTY, null)
     }
 }

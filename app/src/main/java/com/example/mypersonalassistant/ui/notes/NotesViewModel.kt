@@ -5,8 +5,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mypersonalassistant.data.note.NotesRepository
-import com.example.mypersonalassistant.model.Note
+import com.example.mypersonalassistant.data.model.Note
+import com.example.mypersonalassistant.data.repository.OfflineFirstNoteRepository
 import com.example.mypersonalassistant.ui.util.EMPTY
 import com.example.mypersonalassistant.ui.util.showToast
 import com.example.mypersonalassistant.ui.util.toLocalizedException
@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -25,29 +26,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotesViewModel @Inject constructor(
-    private val notesRepository: NotesRepository,
+    private val noteRepository: OfflineFirstNoteRepository,
     application: Application
 ) : AndroidViewModel(application) {
 
-    private val refreshNotes = MutableSharedFlow<Unit>()
     val notes: StateFlow<List<Note>> by lazy {
-        refreshNotes
-            .onStart { emit(Unit) }
-            .map { getNotes() }
+        noteRepository.getNotes()      //TODO: error catch
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
-    private suspend fun getNotes(): List<Note> {
+/*    private suspend fun getNotes(): List<RemoteNote> {
         showProgressBar()
         val notes = try {
-            notesRepository.getAllNotesForUser()
+            noteRepository.getAllNotesForUser()
         } catch (e: Exception) {
             e.toLocalizedException().message?.also { showToast(it) }
             emptyList()
         }
         hideProgressBar()
         return notes
-    }
+    }*/
 
     private val _noteTitle = MutableStateFlow(String.EMPTY)
     val noteTitle: StateFlow<String> = _noteTitle.asStateFlow()
@@ -78,13 +76,12 @@ class NotesViewModel @Inject constructor(
             addNoteProcessing.value = true
             showProgressBar()
             try {
-                notesRepository.addNote(noteTitle.value, noteContent.value)
+                noteRepository.addNote(noteTitle.value, noteContent.value)
             } catch (e: Exception) {
                 e.toLocalizedException().message?.also { showToast(it) }
             }
             _noteTitle.value = String.EMPTY
             _noteContent.value = String.EMPTY
-            refreshNotes()
             hideProgressBar()
             addNoteProcessing.value = false
         }
@@ -94,16 +91,13 @@ class NotesViewModel @Inject constructor(
         viewModelScope.launch {
             showProgressBar()
             try {
-                notesRepository.removeNote(note)
+                noteRepository.removeNote(note.id)
             } catch (e: Exception) {
                 e.toLocalizedException().message?.also { showToast(it) }
             }
-            refreshNotes()
             hideProgressBar()
         }
     }
-
-    private suspend fun refreshNotes() = refreshNotes.emit(Unit)
 
     private val _showProgressBar = mutableStateOf(false)
     val showProgressBar: State<Boolean> = _showProgressBar

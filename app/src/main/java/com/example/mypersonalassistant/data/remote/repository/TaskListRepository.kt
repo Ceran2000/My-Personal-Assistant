@@ -1,10 +1,10 @@
-package com.example.mypersonalassistant.data.task_list
+package com.example.mypersonalassistant.data.remote.repository
 
 import com.example.mypersonalassistant.auth.AuthManager
+import com.example.mypersonalassistant.data.remote.model.Task
 import com.example.mypersonalassistant.firestore.Constants
-import com.example.mypersonalassistant.ui.create_task_list.Task
-import com.example.mypersonalassistant.model.TaskList
-import com.example.mypersonalassistant.model.toTaskList
+import com.example.mypersonalassistant.data.remote.model.TaskList
+import com.example.mypersonalassistant.data.remote.model.toTaskList
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query

@@ -3,8 +3,8 @@ package com.example.mypersonalassistant.ui.task_lists
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mypersonalassistant.data.task_list.TaskListRepository
-import com.example.mypersonalassistant.model.TaskList
+import com.example.mypersonalassistant.data.remote.repository.TaskListRepository
+import com.example.mypersonalassistant.data.remote.model.TaskList
 import com.example.mypersonalassistant.ui.util.showToast
 import com.example.mypersonalassistant.ui.util.toLocalizedException
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -5,15 +5,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import kotlinx.serialization.Serializable
 
-const val updateTaskListNavigationRoute = "update_task_list"
-const val taskListIdArg = "taskListId"
+@Serializable
+data class UpdateTaskList(val id: String)
 
 fun NavGraphBuilder.updateTaskList(navController: NavController) {
-    composable(
-        route = "$updateTaskListNavigationRoute/{$taskListIdArg}",
-        arguments = listOf(navArgument(taskListIdArg) { type = NavType.StringType })
-    ) {
+    composable<UpdateTaskList> {
         UpdateTaskListScreen(navController = navController)
     }
 }

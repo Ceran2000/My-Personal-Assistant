@@ -3,13 +3,15 @@ package com.example.mypersonalassistant.ui.home
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
 
-const val homeNavigationRoute = "home"
+@Serializable
+object Home
 
 fun NavGraphBuilder.homeScreen(
     navController: NavController
 ) {
-    composable(route = homeNavigationRoute) {
+    composable<Home> {
         HomeScreen(navController = navController)
     }
 }

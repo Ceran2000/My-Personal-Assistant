@@ -3,11 +3,13 @@ package com.example.mypersonalassistant.ui.create_update_task_list.create_task_l
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
 
-const val createTaskListNavigationRoute = "create_task_list"
+@Serializable
+object CreateTaskList
 
 fun NavGraphBuilder.createTaskList(navController: NavController) {
-    composable(route = createTaskListNavigationRoute) {
+    composable<CreateTaskList> {
         CreateTaskListScreen(navController = navController)
     }
 }

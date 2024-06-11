@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.mypersonalassistant.R
-import com.example.mypersonalassistant.navigation.notesGraphNavigationRoute
-import com.example.mypersonalassistant.navigation.taskListsGraphNavigationRoute
+import com.example.mypersonalassistant.navigation.NotesNav
+import com.example.mypersonalassistant.navigation.TaskListsNav
 
 @Composable
 fun DrawerContent(
@@ -34,7 +34,7 @@ fun DrawerContent(
             label = { Text(stringResource(R.string.home_drawer_notes_button)) },
             selected = false,
             onClick = {
-                navController.navigate(notesGraphNavigationRoute)
+                navController.navigate(NotesNav)
                 closeDrawer()
             }
         )
@@ -42,7 +42,7 @@ fun DrawerContent(
             label = { Text(stringResource(R.string.home_drawer_task_lists_button)) },
             selected = false,
             onClick = {
-                navController.navigate(taskListsGraphNavigationRoute)
+                navController.navigate(TaskListsNav)
                 closeDrawer()
             }
         )

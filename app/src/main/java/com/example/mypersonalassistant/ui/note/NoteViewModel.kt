@@ -22,7 +22,7 @@ class NoteViewModel @Inject constructor(
     private val noteRepository: OfflineFirstNoteRepository
 ) : AndroidViewModel(application) {
 
-    private val noteId: String = checkNotNull(savedStateHandle[noteIdArg])
+    private val noteId: String = checkNotNull(savedStateHandle["id"])
 
     private val _uiState = MutableStateFlow<UiState<Note>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()

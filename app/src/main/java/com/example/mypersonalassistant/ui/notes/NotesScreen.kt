@@ -42,7 +42,7 @@ import androidx.navigation.NavController
 import com.example.mypersonalassistant.R
 import com.example.mypersonalassistant.ui.component.DefaultAppTopBar
 import com.example.mypersonalassistant.ui.component.contentDescription
-import com.example.mypersonalassistant.ui.note.noteNavigationRoute
+import com.example.mypersonalassistant.ui.note.Note
 import com.example.mypersonalassistant.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -185,4 +185,4 @@ private fun BottomSheet(
     }
 }
 
-private fun NavController.navigateToNote(noteId: String) = navigate("$noteNavigationRoute/$noteId")
+private fun NavController.navigateToNote(noteId: String) = navigate(Note(noteId))

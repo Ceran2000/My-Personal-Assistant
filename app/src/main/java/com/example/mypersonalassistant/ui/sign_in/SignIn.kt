@@ -3,11 +3,13 @@ package com.example.mypersonalassistant.ui.sign_in
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
 
-const val signInNavigationRoute = "sign_in"
+@Serializable
+object SignIn
 
 fun NavGraphBuilder.signInScreen(navController: NavController) {
-    composable(route = signInNavigationRoute) {
+    composable<SignIn> {
         SignInScreen(navController)
     }
 }

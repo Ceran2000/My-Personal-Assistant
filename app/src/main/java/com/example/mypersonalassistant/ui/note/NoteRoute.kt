@@ -2,18 +2,14 @@ package com.example.mypersonalassistant.ui.note
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import kotlinx.serialization.Serializable
 
-const val noteNavigationRoute = "note"
-const val noteIdArg = "noteId"
+@Serializable
+data class Note(val id: String)
 
 fun NavGraphBuilder.noteScreen(navController: NavController) {
-    composable(
-        route = "$noteNavigationRoute/{$noteIdArg}",
-        arguments = listOf(navArgument(noteIdArg) { type = NavType.StringType })
-    ) {
+    composable<Note> {
         NoteScreen(navController = navController)
     }
 }

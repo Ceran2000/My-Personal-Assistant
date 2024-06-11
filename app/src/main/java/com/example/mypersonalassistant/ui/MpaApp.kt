@@ -9,9 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.mypersonalassistant.navigation.Main
 import com.example.mypersonalassistant.navigation.MpaNavHost
-import com.example.mypersonalassistant.navigation.mainNavigationRoute
-import com.example.mypersonalassistant.ui.sign_in.signInNavigationRoute
+import com.example.mypersonalassistant.ui.sign_in.SignIn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -31,7 +31,7 @@ fun MpaApp(
             .launchIn(this)
     }
 
-    Scaffold() { padding ->
+    Scaffold { padding ->
         MpaNavHost(
             modifier = Modifier
                 .fillMaxSize()
@@ -43,10 +43,10 @@ fun MpaApp(
 
 private fun NavHostController.redirectToMainScreen() {
     popBackStack()
-    navigate(mainNavigationRoute)
+    navigate(Main)
 }
 
 private fun NavHostController.redirectToSignInScreen() {
     popBackStack()
-    navigate(signInNavigationRoute)
+    navigate(SignIn)
 }

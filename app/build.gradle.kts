@@ -4,6 +4,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
     id("com.google.devtools.ksp")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -86,7 +87,10 @@ dependencies {
     implementation ("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     //Navigation
-    implementation("androidx.navigation:navigation-compose:2.7.5")
+    implementation("androidx.navigation:navigation-compose:2.8.0-beta02")
+
+    //Serialization
+    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
     //Lottie
     implementation("com.airbnb.android:lottie-compose:6.3.0")

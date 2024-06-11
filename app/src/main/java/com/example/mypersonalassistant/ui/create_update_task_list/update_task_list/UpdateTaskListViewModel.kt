@@ -32,7 +32,7 @@ class UpdateTaskListViewModel @Inject constructor(
     private val taskListRepository: TaskListRepository
 ) : AndroidViewModel(application) {
 
-    private val taskListId: String = checkNotNull(savedStateHandle[taskListIdArg])
+    private val taskListId: String = checkNotNull(savedStateHandle["id"])
 
     private val taskList = MutableStateFlow<TaskList?>(null)
 

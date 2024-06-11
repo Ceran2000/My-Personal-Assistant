@@ -23,9 +23,9 @@ import androidx.navigation.NavController
 import com.example.mypersonalassistant.R
 import com.example.mypersonalassistant.ui.component.DefaultAppTopBar
 import com.example.mypersonalassistant.ui.component.contentDescription
-import com.example.mypersonalassistant.ui.create_update_task_list.create_task_list.createTaskListNavigationRoute
+import com.example.mypersonalassistant.ui.create_update_task_list.create_task_list.CreateTaskList
+import com.example.mypersonalassistant.ui.create_update_task_list.update_task_list.UpdateTaskList
 import com.example.mypersonalassistant.ui.theme.AppTheme
-import com.example.mypersonalassistant.ui.create_update_task_list.update_task_list.updateTaskListNavigationRoute
 
 @Composable
 fun TaskLists(
@@ -71,5 +71,5 @@ fun TaskLists(
     }
 }
 
-private fun NavController.navigateToCreateTaskListScreen() = navigate(createTaskListNavigationRoute)
-private fun NavController.navigateToUpdateTaskListScreen(id: String) = navigate("$updateTaskListNavigationRoute/$id")
+private fun NavController.navigateToCreateTaskListScreen() = navigate(CreateTaskList)
+private fun NavController.navigateToUpdateTaskListScreen(id: String) = navigate(UpdateTaskList(id))

@@ -35,10 +35,8 @@ class NotesViewModel @Inject constructor(
 
     val notes: StateFlow<List<Note>> by lazy {
         flow {
-            showProgressBar()
             val notes = noteRepository.getNotes()
             emitAll(notes)
-            hideProgressBar()
         }.catch { e ->
             e.toLocalizedException().message?.also {
                 showToast(it)

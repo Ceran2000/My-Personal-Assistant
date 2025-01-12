@@ -1,5 +1,6 @@
 package com.example.mypersonalassistant.ui.create_update_task_list.update_task_list
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,6 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,6 +41,7 @@ fun UpdateTaskListScreen(
     viewModel: UpdateTaskListViewModel = hiltViewModel(),
     navController: NavController
 ) {
+    val focusManager = LocalFocusManager.current
     val saveButtonEnabled by viewModel.saveButtonEnabled.collectAsStateWithLifecycle()
     val showProgressBar by viewModel.showProgressBar.collectAsStateWithLifecycle()
 
@@ -77,7 +81,10 @@ fun UpdateTaskListScreen(
             TaskListScreenContent(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding),
+                    .padding(padding)
+                    .pointerInput(Unit) {
+                        detectTapGestures { focusManager.clearFocus() }
+                    },
                 viewModel = viewModel
             )
         }
@@ -98,7 +105,7 @@ private fun TaskListScreenContent(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
             value = title,
             onValueChange = viewModel::onTitleValueChanged,
             label = { Text(stringResource(R.string.update_task_list_task_title_label)) }

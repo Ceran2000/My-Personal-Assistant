@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId = "com.example.mypersonalassistant"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -73,11 +73,11 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
     //Compose
-    implementation(platform("androidx.compose:compose-bom:2024.03.00"))
+    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3:1.3.0-beta03")
     implementation("androidx.compose.material:material-icons-extended")
 
     //Hilt

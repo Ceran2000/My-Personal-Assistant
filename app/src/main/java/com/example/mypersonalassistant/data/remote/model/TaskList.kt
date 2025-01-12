@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.mypersonalassistant.ui.component.contentDescription
+import com.example.mypersonalassistant.ui.create_update_task_list.ReminderTimeUnit
 import com.google.firebase.firestore.DocumentSnapshot
 
 data class TaskList(val id: String, val title: String, val tasks: List<Task>) {
@@ -87,13 +88,33 @@ data class TaskList(val id: String, val title: String, val tasks: List<Task>) {
 }
 
 fun DocumentSnapshot.toTaskList(): TaskList {
-    val tasks = this["tasks"] as List<HashMap<String, Any>>
-    val taskList = tasks.map {
-        Task(it["content"] as String, it["endTimeMillis"] as Long?)
-    }
+
+    val taskList = tasks.map { it.toTask() }
+
     return TaskList(
-        id = this.id,
-        title = this["title"] as String,
+        id = id,
+        title = getString("title").orEmpty(),
         tasks = taskList
     )
+}
+
+@Suppress("UNCHECKED_CAST")
+private val DocumentSnapshot.tasks: List<HashMap<String, Any>> get() = get("tasks") as? List<HashMap<String, Any>> ?: emptyList()
+
+@Suppress("UNCHECKED_CAST")
+private fun Map<String, Any>.toTask(): Task {
+    val content = get("content") as String
+    val endDateUTCMillis = get("endTimeMillis") as? Long
+    val reminderTimes = (get("reminderTimes") as? List<Map<String, Any>>)
+        ?.map { it.toReminderTime() }
+        ?.toSet()
+        ?: emptySet()
+
+    return Task(content, endDateUTCMillis, reminderTimes)
+}
+
+private fun Map<String, Any>.toReminderTime(): ReminderTime {
+    val timeAmount = (get("timeAmount") as Long).toInt()
+    val unit = (get("unit") as String).let { ReminderTimeUnit.valueOf(it) }
+    return ReminderTime(timeAmount, unit)
 }
